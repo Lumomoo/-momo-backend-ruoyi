@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>momo-backend-ruoyi</artifactId>
+        <groupId>org.dromara</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>momo-common-bom</module>
+        <module>momo-common-social</module>
+        <module>momo-common-core</module>
+        <module>momo-common-doc</module>
+        <module>momo-common-excel</module>
+        <module>momo-common-idempotent</module>
+        <module>momo-common-job</module>
+        <module>momo-common-log</module>
+        <module>momo-common-mail</module>
+        <module>momo-common-mybatis</module>
+        <module>momo-common-oss</module>
+        <module>momo-common-ratelimiter</module>
+        <module>momo-common-redis</module>
+        <module>momo-common-satoken</module>
+        <module>momo-common-security</module>
+        <module>momo-common-sms</module>
+        <module>momo-common-web</module>
+        <module>momo-common-translation</module>
+        <module>momo-common-sensitive</module>
+        <module>momo-common-json</module>
+        <module>momo-common-encrypt</module>
+        <module>momo-common-tenant</module>
+        <module>momo-common-websocket</module>
+        <module>momo-common-sse</module>
+    </modules>
+
+    <artifactId>momo-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        common 通用模块
+    </description>
+
+</project>
