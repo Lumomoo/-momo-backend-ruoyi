@@ -12,6 +12,7 @@
     <modules>
         <module>momo-demo</module>
         <module>momo-generator</module>
+        <module>momo-health</module>
         <module>momo-job</module>
         <module>momo-system</module>
         <module>momo-workflow</module>

@@ -87,6 +87,12 @@
             <artifactId>momo-demo</artifactId>
         </dependency>
 
+        <!--  demo模块  -->
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>momo-health</artifactId>
+        </dependency>
+
         <!--  工作流模块  -->
         <dependency>
             <groupId>org.dromara</groupId>
