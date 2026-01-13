@@ -25,6 +25,14 @@ public interface IFoodCategoryService {
     FoodCategoryVo queryById(Long id);
 
     /**
+     * 根据分类ID查询分类名称
+     *
+     * @param id 分类ID
+     * @return 分类名称
+     */
+    String selectCategoryNameById(Long id);
+
+    /**
      * 分页查询食物分类列表
      *
      * @param bo        查询条件

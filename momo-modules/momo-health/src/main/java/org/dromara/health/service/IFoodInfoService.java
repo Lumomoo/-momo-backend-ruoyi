@@ -25,6 +25,14 @@ public interface IFoodInfoService {
     FoodInfoVo queryById(Long id);
 
     /**
+     * 根据食物ID查询食物名称
+     *
+     * @param id 食物ID
+     * @return 食物名称
+     */
+    String selectFoodNameById(Long id);
+
+    /**
      * 分页查询食物营养成分列表
      *
      * @param bo        查询条件

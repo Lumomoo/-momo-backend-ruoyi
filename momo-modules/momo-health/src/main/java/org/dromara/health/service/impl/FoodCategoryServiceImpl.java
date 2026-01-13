@@ -45,6 +45,21 @@ public class FoodCategoryServiceImpl implements IFoodCategoryService {
     }
 
     /**
+     * 根据分类ID查询分类名称
+     *
+     * @param id 分类ID
+     * @return 分类名称
+     */
+    @Override
+    public String selectCategoryNameById(Long id) {
+        if (id == null) {
+            return null;
+        }
+        FoodCategory category = baseMapper.selectById(id);
+        return category == null ? null : category.getName();
+    }
+
+    /**
      * 分页查询食物分类列表
      *
      * @param bo        查询条件

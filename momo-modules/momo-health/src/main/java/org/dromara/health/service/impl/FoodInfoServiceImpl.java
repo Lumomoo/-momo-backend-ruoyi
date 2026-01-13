@@ -45,6 +45,21 @@ public class FoodInfoServiceImpl implements IFoodInfoService {
     }
 
     /**
+     * 根据食物ID查询食物名称
+     *
+     * @param id 食物ID
+     * @return 食物名称
+     */
+    @Override
+    public String selectFoodNameById(Long id) {
+        if (id == null) {
+            return null;
+        }
+        FoodInfo foodInfo = baseMapper.selectById(id);
+        return foodInfo == null ? null : foodInfo.getName();
+    }
+
+    /**
      * 分页查询食物营养成分列表
      *
      * @param bo        查询条件

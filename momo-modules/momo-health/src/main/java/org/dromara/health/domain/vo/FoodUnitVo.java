@@ -5,6 +5,8 @@ import cn.idev.excel.annotation.ExcelIgnoreUnannotated;
 import cn.idev.excel.annotation.ExcelProperty;
 import org.dromara.common.excel.annotation.ExcelDictFormat;
 import org.dromara.common.excel.convert.ExcelDictConvert;
+import org.dromara.common.translation.annotation.Translation;
+import org.dromara.health.common.constant.HealthConstant;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
@@ -39,6 +41,13 @@ public class FoodUnitVo implements Serializable {
      */
     @ExcelProperty(value = "对应食物ID")
     private Long foodId;
+
+    /**
+     * 对应食物名称
+     */
+    @Translation(type = HealthConstant.FOOD_ID_TO_NAME, mapper = "foodId")
+    @ExcelProperty(value = "对应食物名称")
+    private String foodName;
 
     /**
      * 单位名称(如:个/包/碗)
