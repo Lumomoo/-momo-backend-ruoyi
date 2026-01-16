@@ -4,6 +4,7 @@ import org.dromara.common.mybatis.core.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.dromara.common.tenant.core.TenantEntity;
 
 import java.io.Serial;
 
@@ -16,7 +17,7 @@ import java.io.Serial;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("food_info")
-public class FoodInfo extends BaseEntity {
+public class FoodInfo extends TenantEntity {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -45,27 +46,27 @@ public class FoodInfo extends BaseEntity {
     /**
      * 热量(kcal)
      */
-    private Long calories;
+    private Double calories;
 
     /**
      * 蛋白质(g)
      */
-    private Long protein;
+    private Double protein;
 
     /**
      * 脂肪(g)
      */
-    private Long fat;
+    private Double fat;
 
     /**
      * 碳水化合物(g)
      */
-    private Long carbohydrate;
+    private Double carbohydrate;
 
     /**
      * 膳食纤维(g)
      */
-    private Long fiber;
+    private Double fiber;
 
     /**
      * 备注

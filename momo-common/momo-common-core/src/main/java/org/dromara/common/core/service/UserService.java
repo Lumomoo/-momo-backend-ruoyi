@@ -100,4 +100,12 @@ public interface UserService {
      */
     Map<Long, String> selectUserNamesByIds(List<Long> userIds);
 
+    /**
+     * 根据用户 ID 列表查询用户昵称映射关系
+     *
+     * @param userIds 用户 ID 列表
+     * @return Map，其中 key 为用户 ID，value 为对应的用户名称
+     */
+    Map<Long, String> selectNickNamesByIds(List<Long> userIds);
+
 }

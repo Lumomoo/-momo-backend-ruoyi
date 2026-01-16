@@ -59,7 +59,7 @@ public class FoodUnitVo implements Serializable {
      * 对应重量(g)
      */
     @ExcelProperty(value = "对应重量(g)")
-    private Long weightGram;
+    private Double weightGram;
 
     /**
      * 备注

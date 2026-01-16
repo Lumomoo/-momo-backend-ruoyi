@@ -763,6 +763,25 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
         }
         List<SysUser> list = baseMapper.selectList(
             new LambdaQueryWrapper<SysUser>()
+                .select(SysUser::getUserId, SysUser::getUserName)
+                .in(SysUser::getUserId, userIds)
+        );
+        return StreamUtils.toMap(list, SysUser::getUserId, SysUser::getUserName);
+    }
+
+    /**
+     * 根据用户 ID 列表查询用户昵称映射关系
+     *
+     * @param userIds 用户 ID 列表
+     * @return Map，其中 key 为用户 ID，value 为对应的用户名称
+     */
+    @Override
+    public Map<Long, String> selectNickNamesByIds(List<Long> userIds) {
+        if (CollUtil.isEmpty(userIds)) {
+            return Collections.emptyMap();
+        }
+        List<SysUser> list = baseMapper.selectList(
+            new LambdaQueryWrapper<SysUser>()
                 .select(SysUser::getUserId, SysUser::getNickName)
                 .in(SysUser::getUserId, userIds)
         );

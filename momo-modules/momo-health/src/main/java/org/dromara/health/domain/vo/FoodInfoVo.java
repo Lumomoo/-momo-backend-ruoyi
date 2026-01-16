@@ -65,31 +65,31 @@ public class FoodInfoVo implements Serializable {
      * 热量(kcal)
      */
     @ExcelProperty(value = "热量(kcal)")
-    private Long calories;
+    private Double calories;
 
     /**
      * 蛋白质(g)
      */
     @ExcelProperty(value = "蛋白质(g)")
-    private Long protein;
+    private Double protein;
 
     /**
      * 脂肪(g)
      */
     @ExcelProperty(value = "脂肪(g)")
-    private Long fat;
+    private Double fat;
 
     /**
      * 碳水化合物(g)
      */
     @ExcelProperty(value = "碳水化合物(g)")
-    private Long carbohydrate;
+    private Double carbohydrate;
 
     /**
      * 膳食纤维(g)
      */
     @ExcelProperty(value = "膳食纤维(g)")
-    private Long fiber;
+    private Double fiber;
 
     /**
      * 备注

@@ -42,7 +42,7 @@ public class FoodUnitBo extends BaseEntity {
      * 对应重量(g)
      */
     @NotNull(message = "对应重量(g)不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long weightGram;
+    private Double weightGram;
 
     /**
      * 备注

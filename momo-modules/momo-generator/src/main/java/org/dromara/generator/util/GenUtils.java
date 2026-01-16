@@ -211,7 +211,10 @@ public class GenUtils {
     public static Integer getColumnLength(String columnType) {
         if (StringUtils.indexOf(columnType, "(") > 0) {
             String length = StringUtils.substringBetween(columnType, "(", ")");
-            return Integer.valueOf(length);
+            if (StringUtils.isNumeric(length)) {
+                return Integer.valueOf(length);
+            }
+            return 0;
         } else {
             return 0;
         }

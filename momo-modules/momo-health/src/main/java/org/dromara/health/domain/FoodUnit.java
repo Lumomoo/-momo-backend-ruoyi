@@ -4,6 +4,7 @@ import org.dromara.common.mybatis.core.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.dromara.common.tenant.core.TenantEntity;
 
 import java.io.Serial;
 
@@ -16,7 +17,7 @@ import java.io.Serial;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("food_unit")
-public class FoodUnit extends BaseEntity {
+public class FoodUnit extends TenantEntity {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -40,7 +41,7 @@ public class FoodUnit extends BaseEntity {
     /**
      * 对应重量(g)
      */
-    private Long weightGram;
+    private Double weightGram;
 
     /**
      * 备注
