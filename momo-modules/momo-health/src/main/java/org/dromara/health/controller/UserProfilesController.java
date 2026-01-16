@@ -69,6 +69,20 @@ public class UserProfilesController extends BaseController {
     }
 
     /**
+     * 根据用户ID获取用户资料详情信息
+     *
+     * @param userId 用户ID
+     */
+    @SaCheckPermission("health:profiles:query")
+    @GetMapping("/user/{userId}")
+    public R<UserProfilesVo> getInfoByUserId(
+            // 用户ID
+            @NotNull(message = "用户ID不能为空")
+            @PathVariable Long userId) {
+        return R.ok(userProfilesService.queryByUserId(userId));
+    }
+
+    /**
      * 新增用户资料详情
      */
     @SaCheckPermission("health:profiles:add")

@@ -54,6 +54,23 @@ public class UserProfilesServiceImpl implements IUserProfilesService {
     @Override
     public UserProfilesVo queryById(Long id){
         UserProfilesVo vo = baseMapper.selectVoById(id);
+        fillLatestRelatedData(vo);
+        return vo;
+    }
+
+    /**
+     * 根据用户ID查询用户资料详情
+     *
+     * @param userId 用户ID
+     * @return 用户资料详情
+     */
+    @Override
+    public UserProfilesVo queryByUserId(
+            // 用户ID
+            Long userId) {
+        LambdaQueryWrapper<UserProfiles> lqw = Wrappers.lambdaQuery();
+        lqw.eq(UserProfiles::getUserId, userId);
+        UserProfilesVo vo = baseMapper.selectVoOne(lqw);
         fillUserName(vo);
         fillLatestRelatedData(vo);
         return vo;

@@ -25,6 +25,16 @@ public interface IUserProfilesService {
     UserProfilesVo queryById(Long id);
 
     /**
+     * 根据用户ID查询用户资料详情
+     *
+     * @param userId 用户ID
+     * @return 用户资料详情
+     */
+    UserProfilesVo queryByUserId(
+            // 用户ID
+            Long userId);
+
+    /**
      * 分页查询用户资料详情列表
      *
      * @param bo        查询条件
