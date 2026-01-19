@@ -2,6 +2,7 @@ package org.dromara.health.service.impl;
 
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
+import org.dromara.common.core.utils.DateUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,9 +17,14 @@ import org.dromara.health.domain.UserHealthStats;
 import org.dromara.health.mapper.UserHealthStatsMapper;
 import org.dromara.health.service.IUserHealthStatsService;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashMap;
 
 /**
  * 用户健康体征历史Service业务层处理
@@ -68,6 +74,48 @@ public class UserHealthStatsServiceImpl implements IUserHealthStatsService {
     public List<UserHealthStatsVo> queryList(UserHealthStatsBo bo) {
         LambdaQueryWrapper<UserHealthStats> lqw = buildQueryWrapper(bo);
         return baseMapper.selectVoList(lqw);
+    }
+
+    /**
+     * 查询用户近七天每日最新的健康体征
+     *
+     * @param userId 用户ID
+     * @return 用户近七天每日最新的健康体征列表
+     */
+    @Override
+    public List<UserHealthStatsVo> queryLatestSevenDaysByUserId(
+            // 用户ID
+            Long userId) {
+        if (userId == null) {
+            return new ArrayList<>();
+        }
+        LocalDate today = LocalDate.now();
+        Date startDate = DateUtils.toDate(today.minusDays(6));
+        Date endDate = DateUtils.toDate(today.plusDays(1));
+        LambdaQueryWrapper<UserHealthStats> lqw = Wrappers.lambdaQuery();
+        lqw.eq(UserHealthStats::getUserId, userId);
+        lqw.ge(UserHealthStats::getRecordDate, startDate);
+        lqw.lt(UserHealthStats::getRecordDate, endDate);
+        lqw.orderByDesc(UserHealthStats::getRecordDate);
+        lqw.orderByDesc(UserHealthStats::getCreateTime);
+        lqw.orderByDesc(UserHealthStats::getId);
+        List<UserHealthStatsVo> list = baseMapper.selectVoList(lqw);
+        if (list == null || list.isEmpty()) {
+            return new ArrayList<>();
+        }
+        Map<LocalDate, UserHealthStatsVo> latestMap = new LinkedHashMap<>();
+        for (UserHealthStatsVo vo : list) {
+            if (vo == null || vo.getRecordDate() == null) {
+                continue;
+            }
+            LocalDate recordDate = vo.getRecordDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+            if (!latestMap.containsKey(recordDate)) {
+                latestMap.put(recordDate, vo);
+            }
+        }
+        return new ArrayList<>(latestMap.values());
     }
 
     private LambdaQueryWrapper<UserHealthStats> buildQueryWrapper(UserHealthStatsBo bo) {

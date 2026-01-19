@@ -17,8 +17,10 @@ import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.excel.utils.ExcelUtil;
+import org.dromara.health.domain.vo.UserHealthStatsVo;
 import org.dromara.health.domain.vo.UserProfilesVo;
 import org.dromara.health.domain.bo.UserProfilesBo;
+import org.dromara.health.service.IUserHealthStatsService;
 import org.dromara.health.service.IUserProfilesService;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 
@@ -35,6 +37,7 @@ import org.dromara.common.mybatis.core.page.TableDataInfo;
 public class UserProfilesController extends BaseController {
 
     private final IUserProfilesService userProfilesService;
+    private final IUserHealthStatsService userHealthStatsService;
 
     /**
      * 查询用户资料详情列表
@@ -80,6 +83,20 @@ public class UserProfilesController extends BaseController {
             @NotNull(message = "用户ID不能为空")
             @PathVariable Long userId) {
         return R.ok(userProfilesService.queryByUserId(userId));
+    }
+
+    /**
+     * 获取用户近七天每日最新的健康体征列表
+     *
+     * @param userId 用户ID
+     */
+    @SaCheckPermission("health:profiles:query")
+    @GetMapping("/user/{userId}/health-stats/latest-7-days")
+    public R<List<UserHealthStatsVo>> getLatestSevenDaysHealthStats(
+            // 用户ID
+            @NotNull(message = "用户ID不能为空")
+            @PathVariable Long userId) {
+        return R.ok(userHealthStatsService.queryLatestSevenDaysByUserId(userId));
     }
 
     /**

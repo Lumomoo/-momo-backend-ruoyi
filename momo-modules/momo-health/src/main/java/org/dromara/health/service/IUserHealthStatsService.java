@@ -25,6 +25,16 @@ public interface IUserHealthStatsService {
     UserHealthStatsVo queryById(Long id);
 
     /**
+     * 查询用户近七天每日最新的健康体征
+     *
+     * @param userId 用户ID
+     * @return 用户近七天每日最新的健康体征列表
+     */
+    List<UserHealthStatsVo> queryLatestSevenDaysByUserId(
+            // 用户ID
+            Long userId);
+
+    /**
      * 分页查询用户健康体征历史列表
      *
      * @param bo        查询条件

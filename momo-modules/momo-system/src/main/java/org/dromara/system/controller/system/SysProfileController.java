@@ -14,6 +14,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.helper.DataPermissionHelper;
 import org.dromara.common.satoken.utils.LoginHelper;
 import org.dromara.common.web.core.BaseController;
+import org.dromara.health.domain.vo.UserProfilesVo;
+import org.dromara.health.service.IUserProfilesService;
 import org.dromara.system.domain.bo.SysUserBo;
 import org.dromara.system.domain.bo.SysUserPasswordBo;
 import org.dromara.system.domain.bo.SysUserProfileBo;
@@ -42,6 +44,7 @@ public class SysProfileController extends BaseController {
 
     private final ISysUserService userService;
     private final ISysOssService ossService;
+    private final IUserProfilesService userProfilesService;
 
     /**
      * 个人信息
@@ -51,9 +54,10 @@ public class SysProfileController extends BaseController {
         SysUserVo user = userService.selectUserById(LoginHelper.getUserId());
         String roleGroup = userService.selectUserRoleGroup(user.getUserId());
         String postGroup = userService.selectUserPostGroup(user.getUserId());
+        UserProfilesVo userProfiles = userProfilesService.queryByUserId(user.getUserId());
         // 单独做一个vo专门给个人中心用 避免数据被脱敏
         ProfileUserVo profileUser = BeanUtil.toBean(user, ProfileUserVo.class);
-        ProfileVo profileVo = new ProfileVo(profileUser, roleGroup, postGroup);
+        ProfileVo profileVo = new ProfileVo(profileUser, roleGroup, postGroup, userProfiles);
         return R.ok(profileVo);
     }
 
@@ -143,6 +147,8 @@ public class SysProfileController extends BaseController {
      * @param roleGroup 用户所属角色组
      * @param postGroup 用户所属岗位组
      */
-    public record ProfileVo(ProfileUserVo user, String roleGroup, String postGroup) {}
+    public record ProfileVo(ProfileUserVo user, String roleGroup, String postGroup,
+                            // 用户资料详情
+                            UserProfilesVo userProfiles) {}
 
 }
