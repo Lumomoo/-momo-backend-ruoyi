@@ -1,12 +1,14 @@
 package org.dromara.health.service;
 
 import org.dromara.health.domain.vo.UserActiveLogsVo;
+import org.dromara.health.domain.vo.UserActiveLogsSummaryVo;
 import org.dromara.health.domain.bo.UserActiveLogsBo;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
 
 import java.util.Collection;
 import java.util.List;
+import java.time.LocalDate;
 
 /**
  * 用户活动记录Service接口
@@ -40,6 +42,29 @@ public interface IUserActiveLogsService {
      * @return 用户活动记录列表
      */
     List<UserActiveLogsVo> queryList(UserActiveLogsBo bo);
+
+    /**
+     * 查询用户指定日期的资料、健康体征与活动记录汇总
+     *
+     * @param userId     用户ID
+     * @param recordDate 查询日期
+     * @return 用户指定日期的资料、健康体征与活动记录汇总
+     */
+    UserActiveLogsSummaryVo querySummaryByUserIdAndDate(
+            // 用户ID
+            Long userId,
+            // 查询日期
+            LocalDate recordDate);
+
+    /**
+     * 查询用户最新一条活动记录
+     *
+     * @param userId 用户ID
+     * @return 用户最新一条活动记录
+     */
+    UserActiveLogsVo queryLatestByUserId(
+            // 用户ID
+            Long userId);
 
     /**
      * 新增用户活动记录

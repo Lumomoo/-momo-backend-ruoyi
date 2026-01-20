@@ -5,6 +5,8 @@ import cn.idev.excel.annotation.ExcelIgnoreUnannotated;
 import cn.idev.excel.annotation.ExcelProperty;
 import org.dromara.common.excel.annotation.ExcelDictFormat;
 import org.dromara.common.excel.convert.ExcelDictConvert;
+import org.dromara.common.translation.annotation.Translation;
+import org.dromara.health.common.constant.HealthConstant;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
@@ -47,6 +49,13 @@ public class UserActiveLogsVo implements Serializable {
     private Long foodId;
 
     /**
+     * 食物名称
+     */
+    @Translation(type = HealthConstant.FOOD_ID_TO_NAME, mapper = "foodId")
+    @ExcelProperty(value = "食物名称")
+    private String foodName;
+
+    /**
      * 关联运动类型库ID
      */
     @ExcelProperty(value = "关联运动类型库ID")
@@ -83,6 +92,30 @@ public class UserActiveLogsVo implements Serializable {
      */
     @ExcelProperty(value = "本次活动摄入/扣件的总热量(kcal)")
     private Double totalCalories;
+
+    /**
+     * 蛋白质(g)
+     */
+    @ExcelProperty(value = "蛋白质(g)")
+    private Double protein;
+
+    /**
+     * 脂肪(g)
+     */
+    @ExcelProperty(value = "脂肪(g)")
+    private Double fat;
+
+    /**
+     * 碳水化合物(g)
+     */
+    @ExcelProperty(value = "碳水化合物(g)")
+    private Double carbohydrate;
+
+    /**
+     * 膳食纤维(g)
+     */
+    @ExcelProperty(value = "膳食纤维(g)")
+    private Double fiber;
 
     /**
      * 备注

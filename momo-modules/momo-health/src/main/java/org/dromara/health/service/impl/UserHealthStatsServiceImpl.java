@@ -138,7 +138,26 @@ public class UserHealthStatsServiceImpl implements IUserHealthStatsService {
      */
     @Override
     public Boolean insertByBo(UserHealthStatsBo bo) {
+        if (bo != null && bo.getUserId() != null
+            && (bo.getHeight() == null || StringUtils.isBlank(bo.getBloodType()))) {
+            LambdaQueryWrapper<UserHealthStats> lqw = Wrappers.lambdaQuery();
+            lqw.eq(UserHealthStats::getUserId, bo.getUserId());
+            lqw.orderByDesc(UserHealthStats::getRecordDate);
+            lqw.orderByDesc(UserHealthStats::getCreateTime);
+            lqw.orderByDesc(UserHealthStats::getId);
+            lqw.last("limit 1");
+            UserHealthStats latest = baseMapper.selectOne(lqw);
+            if (latest != null) {
+                if (bo.getHeight() == null && latest.getHeight() != null) {
+                    bo.setHeight(latest.getHeight());
+                }
+                if (StringUtils.isBlank(bo.getBloodType()) && StringUtils.isNotBlank(latest.getBloodType())) {
+                    bo.setBloodType(latest.getBloodType());
+                }
+            }
+        }
         UserHealthStats add = MapstructUtils.convert(bo, UserHealthStats.class);
+        add.setRecordDate(new Date());
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {

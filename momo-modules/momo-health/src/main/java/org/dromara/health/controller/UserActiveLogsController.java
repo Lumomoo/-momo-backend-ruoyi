@@ -1,11 +1,14 @@
 package org.dromara.health.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import org.dromara.common.satoken.utils.LoginHelper;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import org.dromara.common.idempotent.annotation.RepeatSubmit;
@@ -17,6 +20,7 @@ import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.excel.utils.ExcelUtil;
+import org.dromara.health.domain.vo.UserActiveLogsSummaryVo;
 import org.dromara.health.domain.vo.UserActiveLogsVo;
 import org.dromara.health.domain.bo.UserActiveLogsBo;
 import org.dromara.health.service.IUserActiveLogsService;
@@ -69,6 +73,40 @@ public class UserActiveLogsController extends BaseController {
     }
 
     /**
+     * 获取用户最新一条活动记录
+     *
+     * @param userId 用户ID
+     */
+    @SaCheckPermission("health:activeLogs:query")
+    @GetMapping("/user/{userId}/latest")
+    public R<UserActiveLogsVo> getLatestByUserId(
+            // 用户ID
+            @NotNull(message = "用户ID不能为空")
+            @PathVariable Long userId) {
+        return R.ok(userActiveLogsService.queryLatestByUserId(userId));
+    }
+
+    /**
+     * 获取用户指定日期的资料、健康体征与活动记录
+     *
+     * @param userId     用户ID
+     * @param recordDate 查询日期
+     */
+    @SaCheckPermission("health:activeLogs:query")
+    @GetMapping("/user/{userId}/summary")
+    public R<UserActiveLogsSummaryVo> getSummaryByUserIdAndDate(
+            // 用户ID
+            @NotNull(message = "用户ID不能为空")
+            @PathVariable Long userId,
+            // 查询日期
+            @NotNull(message = "日期不能为空")
+            @RequestParam("date")
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate recordDate) {
+        return R.ok(userActiveLogsService.querySummaryByUserIdAndDate(userId, recordDate));
+    }
+
+    /**
      * 新增用户活动记录
      */
     @SaCheckPermission("health:activeLogs:add")
@@ -76,6 +114,9 @@ public class UserActiveLogsController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody UserActiveLogsBo bo) {
+        if (bo.getUserId() == null) {
+            bo.setUserId(LoginHelper.getUserId());
+        }
         return toAjax(userActiveLogsService.insertByBo(bo));
     }
 
@@ -87,6 +128,9 @@ public class UserActiveLogsController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody UserActiveLogsBo bo) {
+        if (bo.getUserId() == null) {
+            bo.setUserId(LoginHelper.getUserId());
+        }
         return toAjax(userActiveLogsService.updateByBo(bo));
     }
 

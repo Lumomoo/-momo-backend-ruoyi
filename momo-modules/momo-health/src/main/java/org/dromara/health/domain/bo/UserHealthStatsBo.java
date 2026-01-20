@@ -31,7 +31,6 @@ public class UserHealthStatsBo extends BaseEntity {
     /**
      * 关联用户ID
      */
-    @NotNull(message = "关联用户ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long userId;
 
     /**
@@ -42,6 +41,7 @@ public class UserHealthStatsBo extends BaseEntity {
     /**
      * 当前体重(kg)
      */
+    @NotNull(message = "当前体重(kg)不能为空", groups = { AddGroup.class, EditGroup.class })
     private Double weight;
 
     /**
@@ -52,7 +52,6 @@ public class UserHealthStatsBo extends BaseEntity {
     /**
      * 记录日期
      */
-    @NotNull(message = "记录日期不能为空", groups = { AddGroup.class, EditGroup.class })
     private Date recordDate;
 
     /**

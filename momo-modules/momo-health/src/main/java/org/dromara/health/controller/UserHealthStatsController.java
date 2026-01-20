@@ -2,10 +2,12 @@ package org.dromara.health.controller;
 
 import java.util.List;
 
+import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import org.dromara.common.satoken.utils.LoginHelper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import org.dromara.common.idempotent.annotation.RepeatSubmit;
@@ -76,6 +78,9 @@ public class UserHealthStatsController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody UserHealthStatsBo bo) {
+        if (bo.getUserId() == null) {
+            bo.setUserId(LoginHelper.getUserId());
+        }
         return toAjax(userHealthStatsService.insertByBo(bo));
     }
 

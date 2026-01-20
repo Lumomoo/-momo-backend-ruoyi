@@ -29,7 +29,6 @@ public class UserActiveLogsBo extends BaseEntity {
     /**
      * 用户ID
      */
-    @NotNull(message = "用户ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long userId;
 
     /**
@@ -66,7 +65,6 @@ public class UserActiveLogsBo extends BaseEntity {
     /**
      * 本次活动摄入/扣件的总热量(kcal)
      */
-    @NotNull(message = "本次活动摄入/扣件的总热量(kcal)不能为空", groups = { AddGroup.class, EditGroup.class })
     private Double totalCalories;
 
     /**
