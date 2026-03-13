@@ -62,6 +62,11 @@ public class UserActiveLogsVo implements Serializable {
     private Long exerciseId;
 
     /**
+     * 运动名称
+     */
+    private String exerciseName;
+
+    /**
      * 活动类型：1-饮食，2-运动
      */
     @ExcelProperty(value = "活动类型：1-饮食，2-运动")

@@ -15,9 +15,11 @@ import org.dromara.health.domain.vo.UserActiveLogsSummaryVo;
 import org.dromara.health.domain.vo.UserActiveLogsVo;
 import org.dromara.health.domain.vo.UserHealthStatsVo;
 import org.dromara.health.domain.vo.UserProfilesVo;
+import org.dromara.health.domain.ActivityMet;
 import org.dromara.health.domain.FoodInfo;
 import org.dromara.health.domain.UserActiveLogs;
 import org.dromara.health.domain.UserHealthStats;
+import org.dromara.health.mapper.ActivityMetMapper;
 import org.dromara.health.mapper.FoodInfoMapper;
 import org.dromara.health.mapper.UserActiveLogsMapper;
 import org.dromara.health.mapper.UserHealthStatsMapper;
@@ -48,6 +50,7 @@ public class UserActiveLogsServiceImpl implements IUserActiveLogsService {
     private final IUserProfilesService userProfilesService;
     private final UserHealthStatsMapper userHealthStatsMapper;
     private final FoodInfoMapper foodInfoMapper;
+    private final ActivityMetMapper activityMetMapper;
 
     /**
      * 查询用户活动记录
@@ -154,6 +157,7 @@ public class UserActiveLogsServiceImpl implements IUserActiveLogsService {
         List<UserActiveLogsVo> list = baseMapper.selectVoList(lqw);
         List<UserActiveLogsVo> result = list == null ? new ArrayList<>() : list;
         fillFoodNutrition(result);
+        fillExerciseNames(result);
         return result;
     }
 
@@ -193,6 +197,45 @@ public class UserActiveLogsServiceImpl implements IUserActiveLogsService {
             item.setFat(calcByScale(foodInfo.getFat(), scale));
             item.setCarbohydrate(calcByScale(foodInfo.getCarbohydrate(), scale));
             item.setFiber(calcByScale(foodInfo.getFiber(), scale));
+        }
+    }
+
+    /**
+     * 填充运动记录的运动名称
+     *
+     * @param list 活动记录列表
+     */
+    private void fillExerciseNames(
+            // 活动记录列表
+            List<UserActiveLogsVo> list) {
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        List<Long> exerciseIds = list.stream()
+                .filter(Objects::nonNull)
+                .filter(item -> item.getActiveType() != null && item.getActiveType() == 2L)
+                .map(UserActiveLogsVo::getExerciseId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (exerciseIds.isEmpty()) {
+            return;
+        }
+        Map<Long, ActivityMet> exerciseMap = activityMetMapper.selectBatchIds(exerciseIds).stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(ActivityMet::getId, item -> item, (left, right) -> left));
+        for (UserActiveLogsVo item : list) {
+            if (item == null || item.getActiveType() == null || item.getActiveType() != 2L) {
+                continue;
+            }
+            if (item.getExerciseId() == null) {
+                continue;
+            }
+            ActivityMet activityMet = exerciseMap.get(item.getExerciseId());
+            if (activityMet == null) {
+                continue;
+            }
+            item.setExerciseName(activityMet.getActivityName());
         }
     }
 

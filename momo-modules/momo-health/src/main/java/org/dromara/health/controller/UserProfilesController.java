@@ -1,6 +1,7 @@
 package org.dromara.health.controller;
 
 import java.util.List;
+import java.time.LocalDate;
 
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,8 +19,10 @@ import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.excel.utils.ExcelUtil;
 import org.dromara.health.domain.vo.UserHealthStatsVo;
+import org.dromara.health.domain.vo.UserActiveLogsSummaryVo;
 import org.dromara.health.domain.vo.UserProfilesVo;
 import org.dromara.health.domain.bo.UserProfilesBo;
+import org.dromara.health.service.IUserActiveLogsService;
 import org.dromara.health.service.IUserHealthStatsService;
 import org.dromara.health.service.IUserProfilesService;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -38,6 +41,7 @@ public class UserProfilesController extends BaseController {
 
     private final IUserProfilesService userProfilesService;
     private final IUserHealthStatsService userHealthStatsService;
+    private final IUserActiveLogsService userActiveLogsService;
 
     /**
      * 查询用户资料详情列表
@@ -72,7 +76,7 @@ public class UserProfilesController extends BaseController {
     }
 
     /**
-     * 根据用户ID获取用户资料详情信息
+     * 根据用户ID获取用户资料详情信息（包含当天活动记录）
      *
      * @param userId 用户ID
      */
@@ -82,7 +86,12 @@ public class UserProfilesController extends BaseController {
             // 用户ID
             @NotNull(message = "用户ID不能为空")
             @PathVariable Long userId) {
-        return R.ok(userProfilesService.queryByUserId(userId));
+        UserActiveLogsSummaryVo summary = userActiveLogsService.querySummaryByUserIdAndDate(userId, LocalDate.now());
+        UserProfilesVo userProfiles = summary.getUserProfiles();
+        if (userProfiles != null) {
+            userProfiles.setTodayUserActiveLogs(summary.getUserActiveLogs());
+        }
+        return R.ok(userProfiles);
     }
 
     /**

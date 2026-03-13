@@ -1,6 +1,7 @@
 package org.dromara.health.domain.vo;
 
 import java.util.Date;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dromara.common.translation.annotation.Translation;
 import org.dromara.common.translation.constant.TransConstant;
@@ -100,5 +101,9 @@ public class UserProfilesVo implements Serializable {
     @ExcelProperty(value = "备注")
     private String remark;
 
+    /**
+     * 当天用户活动记录列表
+     */
+    private List<UserActiveLogsVo> todayUserActiveLogs;
 
 }
